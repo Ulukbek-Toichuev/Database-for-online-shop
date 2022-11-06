@@ -1,4 +1,4 @@
-
+BEGIN;
 CREATE TABLE Category(
     category_id SERIAL,
     category_name VARCHAR(50) NOT NULL UNIQUE,
@@ -56,7 +56,7 @@ CREATE TABLE Photo(
 
 CREATE TABLE Books_Category(
     books_category_id SERIAL,
-    book_id BIGINT REFERENCES Products(books_id) ON DELETE CASCADE,
+    book_id BIGINT REFERENCES Products(book_id) ON DELETE CASCADE,
     category_id BIGINT REFERENCES Category(category_id) ON DELETE CASCADE,
 
     CONSTRAINT pk_books_category_id PRIMARY KEY(books_category_id)
@@ -117,3 +117,5 @@ CREATE TABLE Orders(
 
      CONSTRAINT pk_order_id PRIMARY KEY(order_id)
 );
+
+COMMIT;
