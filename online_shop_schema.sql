@@ -67,6 +67,7 @@ CREATE TABLE Users(
     users_id SERIAL,
     users_name VARCHAR(255) NOT NULL,
     users_email VARCHAR(255) NOT NULL,
+    users_phone_num VARCHAR(12) UNIQUE NOT NULL,
     users_hash_password VARCHAR(16) UNIQUE NOT NULL,
     users_registered_date TIMESTAMP NOT NULL DEFAULT NOW(),
 
