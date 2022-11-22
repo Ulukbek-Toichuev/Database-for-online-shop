@@ -1,3 +1,5 @@
+-- DEPRECATED!!!
+
 -- Вставка в таблицу Users
 INSERT INTO Users(users_name, users_email, users_phone_num, users_hash_password, users_registered_date)
 VALUES
@@ -20,7 +22,7 @@ VALUES
     FROM generate_series(1,9)), ''))
     ),
 
-    (SELECT array_to_string(ARRAY(SELECT chr((48 + round(random() * 59)) :: integer) 
+    (SELECT array_to_string(ARRAY(SELECT chr((48 + round(random() * 9)) :: integer) 
     FROM generate_series(1,16)), '')),
     (select * from now())
 );
@@ -89,13 +91,30 @@ Add_photos AS(
        (SELECT floor(random() * (1000-100+1) + 100)::int),
        
        (SELECT floor(random() * (21-10+1) + 10)::int))
-       RETURNING book_id AS id_for_photos_table)
-      
-INSERT INTO photos (book_id, photo_url)
-VALUES 
-(
-    (SELECT id_for_photos_table FROM Add_photos),
-    (SELECT 
+       RETURNING book_id AS id_for_photos_table),
+       
+Add_Categories AS(
+   INSERT INTO photos (book_id, photo_url)
+   VALUES
+   (
+       (SELECT id_for_photos_table FROM Add_photos),
+       (SELECT 
        (array_to_string(ARRAY(SELECT chr((97 + round(random() * 25)) :: integer)
-       FROM generate_series(1,50)), '')))
+       FROM generate_series(1,50)), ''))))
+       RETURNING book_id AS id_for_categories_table)
+INSERT INTO books_category (book_id, category_id)
+VALUES
+(
+   (SELECT id_for_categories_table FROM Add_Categories),
+   (SELECT c.category_id FROM categories c WHERE c.category_id = (SELECT floor(random() * 10 + 1)::int))
+);
+
+-- Вставка в таблицу Carts
+INSERT INTO carts (users_id, book_id, products_count, add_to_cart_date)
+VALUES
+(
+    (SELECT u.users_id FROM users u WHERE u.users_id = (SELECT floor(random() * (SELECT COUNT(u.users_id) FROM users u) + 1)::int)),
+    (SELECT b.book_id FROM books b WHERE b.book_id = (SELECT floor(random() * (SELECT COUNT(b.book_id) FROM books b) + 1)::int)),
+    (SELECT floor(random() * 10 + 1)::int),
+    (SELECT * FROM NOW())
 );

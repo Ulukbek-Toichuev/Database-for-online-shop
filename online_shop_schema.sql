@@ -1,5 +1,4 @@
 BEGIN;
-
 CREATE TABLE Categories(
     category_id SERIAL,
     category_name VARCHAR(50) NOT NULL UNIQUE,
@@ -29,11 +28,12 @@ CREATE TABLE Books(
     book_title VARCHAR(255) NOT NULL UNIQUE,
     book_author BIGINT REFERENCES Authors(author_id) ON DELETE SET NULL,
     book_publisher BIGINT REFERENCES Publishers(publisher_id) ON DELETE SET NULL,
-    book_availability_status BOOLEAN NOT NULL DEFAULT TRUE,
+    --book_availability_status BOOLEAN NOT NULL DEFAULT TRUE,
     book_description TEXT NOT NULL,
 
     CONSTRAINT pk_book_id PRIMARY KEY(book_id)
 );
+
 
 CREATE TABLE Metadatas(
     metadata_id serial,
@@ -84,6 +84,7 @@ CREATE TABLE Carts(
     CONSTRAINT pk_cart_id PRIMARY KEY(cart_id)
 );
 
+
 CREATE TABLE Order_Status(
     status_id serial,
     status_name VARCHAR(50) NOT NULL UNIQUE,
@@ -99,7 +100,7 @@ CREATE TABLE Orders(
     house_num VARCHAR(255) NOT NULL,
     flat_num VARCHAR(255),
     description_for_shipping TEXT,
-    order_status BIGINT REFERENCES Order_Status(order_id),
+    order_status BIGINT REFERENCES Order_Status(status_id),
     ordered_date TIMESTAMP NOT NULL DEFAULT NOW(),
     
     CONSTRAINT pk_order_id PRIMARY KEY(order_id)
