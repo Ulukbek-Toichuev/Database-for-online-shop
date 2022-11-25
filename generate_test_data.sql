@@ -11,7 +11,7 @@ SELECT
    '996' || floor(random() * (519-501+1) + 501)::int::VARCHAR(3) || floor(random() * 1000000 + 1)::int::VARCHAR(10),
    md5(random()::text)::VARCHAR(16),
    (select * from now())
-FROM generate_series(0,10) users_id;
+FROM generate_series(1,10) users_id;
 
 -- Вставка в таблицу Authors, Publishers, Categories
 INSERT INTO public.authors (author_id, author_name, about_author)

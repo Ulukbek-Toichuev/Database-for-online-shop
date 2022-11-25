@@ -14,20 +14,13 @@ CREATE TABLE Authors(
     CONSTRAINT pk_author_id PRIMARY KEY(author_id)
 );
 
-CREATE TABLE Publishers(
-    publisher_id SERIAL,
-    publisher_name VARCHAR(255) NOT NULL UNIQUE,
-    about_publisher TEXT NOT NULL,
-
-    CONSTRAINT pk_publisher_id PRIMARY KEY(publisher_id)
-);
-
 CREATE TABLE Books(
     book_id SERIAL,
-    book_code VARCHAR(6) NOT NULL UNIQUE,
-    book_title VARCHAR(255) NOT NULL UNIQUE,
+    book_code VARCHAR(12) NOT NULL UNIQUE,
+    book_uuid uuid DEFAULT uuid_generate_v4(),
+    book_title VARCHAR(255) NOT NULL,
     book_author BIGINT REFERENCES Authors(author_id) ON DELETE SET NULL,
-    book_publisher BIGINT REFERENCES Publishers(publisher_id) ON DELETE SET NULL,
+    book_publisher VARCHAR(255) NOT NULL,
     --book_availability_status BOOLEAN NOT NULL DEFAULT TRUE,
     book_description TEXT NOT NULL,
 
@@ -100,7 +93,7 @@ CREATE TABLE Orders(
     house_num VARCHAR(255) NOT NULL,
     flat_num VARCHAR(255),
     description_for_shipping TEXT,
-    order_status BIGINT REFERENCES Order_Status(status_id),
+    order_status BIGINT REFERENCES Order_Status(status_id) DEFAULT (),
     ordered_date TIMESTAMP NOT NULL DEFAULT NOW(),
     
     CONSTRAINT pk_order_id PRIMARY KEY(order_id)
